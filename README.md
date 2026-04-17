@@ -1,6 +1,6 @@
 Orientaciones de desarrollo.
 
-1. En la tabla propuesta (ver imagen.png), se elaborará un programa que permita la captura de datos básicos de un cliente del consultorio odontológico del doctor “XXX”. Los datos a leer de cada cliente son: Cédula, Nombre, Teléfono, Tipo de Cliente (Particular, EPS, Prepagada), Tipo de Atención (Limpieza, Calzas, Extracción, Diagnóstico), Cantidad, Prioridad de Atención (Normal, Urgente), Fecha de la Cita.
+1. En la tabla propuesta (ver imagen.png), se elaborará un programa que permita la captura de datos básicos de un cliente del consultorio odontológico del doctor “AAA”. Los datos a leer de cada cliente son: Cédula, Nombre, Teléfono, Tipo de Cliente (Particular, EPS, Prepagada), Tipo de Atención (Limpieza, Calzas, Extracción, Diagnóstico), Cantidad, Prioridad de Atención (Normal, Urgente), Fecha de la Cita.
 
 2. Para la elaboración de la actividad seguirá las siguientes acciones:
 

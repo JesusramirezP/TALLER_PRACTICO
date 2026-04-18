@@ -68,27 +68,28 @@ def registar_cliente():
         print("  2. Calzas")
         print("  3. Extracción")
         print("  4. Diagnostico")
+
+        cant_procedimientos = 0
+        numero_extracciones = 0
+
         tipo_atencion = input("Ingrese una opción: ")
         if tipo_atencion == "1":
             tipo_atencion = "Limpieza"
-            cantidad_procedimiento = 1
+            cant_procedimientos = 1
 
         if tipo_atencion == "2":
             tipo_atencion = "Calzas"
-            cantidad_procedimiento = 0
-            cantidad_procedimiento = input("Ingrese cantidad >0 ")
-            cantidad_procedimiento = int(cantidad_procedimiento)
+            cant_procedimientos = int(input("Ingrese cantidad >0: "))
 
 
         if tipo_atencion == "3":
             tipo_atencion = "Extracción"
-            cantidad_procedimiento = 0
-            cantidad_procedimiento = input("Ingrese cantidad >0 ")
-            cantidad_procedimiento = int(cantidad_procedimiento)
+            cant_procedimientos = int(input("Ingrese cantidad >0: "))
+            numero_extracciones = cant_procedimientos  # solo aquí aplica
 
         if tipo_atencion == "4":
             tipo_atencion = "Diagnóstico"
-            cantidad_procedimiento = 1
+            cant_extraccion = 1
 
         print("Prioridad de atención: ")
         print("  1. Normal")
@@ -103,7 +104,7 @@ def registar_cliente():
 
         valor_cita = TARIFAS[tipo_cliente]["cita"]
         valor_atencion = TARIFAS[tipo_cliente][tipo_atencion]
-        valor_atencion = valor_atencion * cantidad_procedimiento
+        valor_atencion = valor_atencion * cant_procedimientos
         total_a_pagar = valor_cita + valor_atencion
 
         cliente = Cliente()
@@ -112,12 +113,13 @@ def registar_cliente():
         cliente.telefono = telefono_cliente
         cliente.tip_cliente = tipo_cliente
         cliente.tip_atencion = tipo_atencion
-        cliente.cantidad = cantidad_procedimiento
+        cliente.cantidad = cant_procedimientos
         cliente.prioridad = prioridad_atencion
         cliente.fecha = fecha_cita
         cliente.valor_cita = valor_cita
         cliente.valor_atencion = valor_atencion
         cliente.total = total_a_pagar
+        cliente.cant_extraccion = numero_extracciones
         lista_clientes.append(cliente)
 
         
@@ -171,9 +173,34 @@ def buscar_cliente():
             f"{fmt_cop(cliente_encontrado.valor_atencion):>16}{fmt_cop(cliente_encontrado.total):>12}")
 
         
-    
+# ──────────────────────────────────────────────
+#  FUNCIÓN: estadisticas
+#  Main program.
+# ──────────────────────────────────────────────    
 
+def estadisticas():
+    if not lista_clientes:
+        print("\n  (No hay clientes registrados aún.)")
+        return
     
+    total_clientes = len(lista_clientes)
+
+    ingresos_totales = 0
+    for cliente in lista_clientes:
+        ingresos_totales = ingresos_totales + cliente.total
+
+    clientes_extraccion = 0
+    for cliente in lista_clientes:
+        clientes_extraccion = clientes_extraccion + cliente.cant_extraccion
+
+ 
+    print("\n" + "═" * 50)
+    print("  ESTADÍSTICAS DEL CONSULTORIO")
+    print("═" * 50)
+    print(f"  1. Total de clientes           : {total_clientes}")
+    print(f"  2. Ingresos totales recibidos  : {fmt_cop(ingresos_totales)}")
+    print(f"  3. Clientes con extracción     : {clientes_extraccion}")
+    print("═" * 50)
 
 # ──────────────────────────────────────────────
 #  FUNCIÓN: menu
@@ -199,6 +226,8 @@ def menu():
             mostrar_cliente()
         if opcion == "3":
             buscar_cliente()
+        if opcion == "4":
+            estadisticas()
         if opcion == "5":
             ciclo_menu = False
 

@@ -13,3 +13,4 @@ class   Cliente:
     valor_cita : float
     valor_atencion: float
     total: float
+    cant_extraccion: int

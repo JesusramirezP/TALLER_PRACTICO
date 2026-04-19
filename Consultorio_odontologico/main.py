@@ -1,38 +1,20 @@
 from typing import List
 from cliente import Cliente
+from tarifas import TARIFAS
+from valid_error_handling import Validacion_cedula, validacion_nombre, Validacion_telef, validar_fecha
 
 
 
 # lista = arreglo = colección
 lista_clientes: list[Cliente] = [ ]
 
-# --------------- Diccionario para tarifas ---------------
-TARIFAS = {
-    "Particular": {
-        "cita": 80000,
-        "Limpieza":    60000,
-        "Calzas":      80000,
-        "Extracción":  100000,
-        "Diagnóstico": 50000,
-    },
-    "EPS": {
-        "cita": 5000,
-        "Limpieza":    0,
-        "Calzas":      40000,
-        "Extracción":  40000,
-        "Diagnóstico": 0,
-    },
-    "Prepagada": {
-        "cita": 30000,
-        "Limpieza":    0,
-        "Calzas":      10000,
-        "Extracción":  10000,
-        "Diagnóstico": 0,
-    },
-}
 
-# ── Utilidad: formato moneda colombiana ──
-def fmt_cop(valor: int) -> str:          # ← AQUÍ, antes de las clases
+# ──────────────────────────────────────────────
+#  FUNCIÓN: Formato precios
+#  Utilidad: formato moneda colombiana
+# ──────────────────────────────────────────────
+
+def fmt_cop(valor: int) -> str:      
     return f"${valor:,.0f}".replace(",", ".")
 
 # ──────────────────────────────────────────────
@@ -44,90 +26,87 @@ def registar_cliente():
     print("\n" + "─" * 50)
     print("  NUEVO CLIENTE")
     print("─" * 50)
-    cedula_cliente = input("Ingrese el número de cedula: ")
-    if(cedula_cliente == ""):
-        print("ERROR: El campo del número de cedula no puede quedar vacío ")
-    else:
-        nombre_cliente = input("Ingrese nombre del cliente: ")
-        telefono_cliente = input("Ingrese número de teléfono: ")
+    cedula_cliente = Validacion_cedula()    #Se realiza proceso de captura y validación para el numero de cédula
+    nombre_cliente = validacion_nombre()    #Se realiza proceso de captura y validación para el nombre
+    telefono_cliente = Validacion_telef()   #Se realiza proceso de captura y validación para el numero de telefono
 
-        print("Tipo de cliente: ")
-        print("  1. Particular")
-        print("  2. EPS")
-        print("  3. Prepagada")
-        tipo_cliente = input("Ingrese una oppción: ")
-        if tipo_cliente == "1":
-            tipo_cliente = "Particular"
-        if tipo_cliente == "2":
-            tipo_cliente = "EPS"
-        if tipo_cliente == "3":
-            tipo_cliente = "Prepagada"
+    print("Tipo de cliente: ")
+    print("  1. Particular")
+    print("  2. EPS")
+    print("  3. Prepagada")
+    tipo_cliente = input("Ingrese una oppción: ")
+    if tipo_cliente == "1":
+        tipo_cliente = "Particular"
+    if tipo_cliente == "2":
+        tipo_cliente = "EPS"
+    if tipo_cliente == "3":
+        tipo_cliente = "Prepagada"
 
-        print("Tipo de atención: ")
-        print("  1. Limpieza")
-        print("  2. Calzas")
-        print("  3. Extracción")
-        print("  4. Diagnostico")
+    print("Tipo de atención: ")
+    print("  1. Limpieza")
+    print("  2. Calzas")
+    print("  3. Extracción")
+    print("  4. Diagnostico")
 
-        cant_procedimientos = 0
-        numero_extracciones = 0
+    cant_procedimientos = 0
+    numero_extracciones = 0
 
-        tipo_atencion = input("Ingrese una opción: ")
-        if tipo_atencion == "1":
-            tipo_atencion = "Limpieza"
-            cant_procedimientos = 1
+    tipo_atencion = input("Ingrese una opción: ")
+    if tipo_atencion == "1":
+        tipo_atencion = "Limpieza"
+        cant_procedimientos = 1
 
-        if tipo_atencion == "2":
-            tipo_atencion = "Calzas"
-            cant_procedimientos = int(input("Ingrese cantidad >0: "))
+    if tipo_atencion == "2":
+        tipo_atencion = "Calzas"
+        cant_procedimientos = int(input("Ingrese cantidad >0: "))
 
 
-        if tipo_atencion == "3":
-            tipo_atencion = "Extracción"
-            cant_procedimientos = int(input("Ingrese cantidad >0: "))
-            numero_extracciones = cant_procedimientos  # solo aquí aplica
+    if tipo_atencion == "3":
+        tipo_atencion = "Extracción"
+        cant_procedimientos = int(input("Ingrese cantidad >0: "))
+        numero_extracciones = cant_procedimientos  # solo aquí aplica
 
-        if tipo_atencion == "4":
-            tipo_atencion = "Diagnóstico"
-            cant_extraccion = 1
+    if tipo_atencion == "4":
+        tipo_atencion = "Diagnóstico"
+        cant_extraccion = 1
 
-        print("Prioridad de atención: ")
-        print("  1. Normal")
-        print("  2. Urgente")
-        prioridad_atencion = input("Ingrese una opcion: ")
-        if prioridad_atencion == "1":
-            prioridad_atencion = "Normal"
-        if prioridad_atencion == "2":
-            prioridad_atencion = "Urgente"
+    print("Prioridad de atención: ")
+    print("  1. Normal")
+    print("  2. Urgente")
+    prioridad_atencion = input("Ingrese una opcion: ")
+    if prioridad_atencion == "1":
+        prioridad_atencion = "Normal"
+    if prioridad_atencion == "2":
+        prioridad_atencion = "Urgente"
 
-        fecha_cita = input("Ingrese fecha de la cita (DD/MM/AAAA): ")
+    fecha_cita = validar_fecha()   #Se realiza proceso de captura y validación para la fecha
 
-        valor_cita = TARIFAS[tipo_cliente]["cita"]
-        valor_atencion = TARIFAS[tipo_cliente][tipo_atencion]
-        valor_atencion = valor_atencion * cant_procedimientos
-        total_a_pagar = valor_cita + valor_atencion
+    valor_cita = TARIFAS[tipo_cliente]["cita"]
+    valor_atencion = TARIFAS[tipo_cliente][tipo_atencion]
+    valor_atencion = valor_atencion * cant_procedimientos
+    total_a_pagar = valor_cita + valor_atencion
 
-        cliente = Cliente()
-        cliente.cedula = cedula_cliente
-        cliente.nombre = nombre_cliente
-        cliente.telefono = telefono_cliente
-        cliente.tip_cliente = tipo_cliente
-        cliente.tip_atencion = tipo_atencion
-        cliente.cantidad = cant_procedimientos
-        cliente.prioridad = prioridad_atencion
-        cliente.fecha = fecha_cita
-        cliente.valor_cita = valor_cita
-        cliente.valor_atencion = valor_atencion
-        cliente.total = total_a_pagar
-        cliente.cant_extraccion = numero_extracciones
-        lista_clientes.append(cliente)
+    cliente = Cliente()
+    cliente.cedula = cedula_cliente
+    cliente.nombre = nombre_cliente
+    cliente.telefono = telefono_cliente
+    cliente.tip_cliente = tipo_cliente
+    cliente.tip_atencion = tipo_atencion
+    cliente.cantidad = cant_procedimientos
+    cliente.prioridad = prioridad_atencion
+    cliente.fecha = fecha_cita
+    cliente.valor_cita = valor_cita
+    cliente.valor_atencion = valor_atencion
+    cliente.total = total_a_pagar
+    cliente.cant_extraccion = numero_extracciones
+    lista_clientes.append(cliente)
 
-        
+    
 
-        print("\n--- RESUMEN DE PAGO ---")
-        print(f"Valor cita: ${valor_cita}")
-        print(f"Valor atención ({tipo_atencion}): ${valor_atencion}")
-        print(f"TOTAL: ${total_a_pagar}")
+    print("\n--- RESUMEN DE PAGO ---")
+    print(f"Valor cita: ${valor_cita}")
+    print(f"Valor atención ({tipo_atencion}): ${valor_atencion}")
+    print(f"TOTAL: ${total_a_pagar}")
 
 
 # ──────────────────────────────────────────────
